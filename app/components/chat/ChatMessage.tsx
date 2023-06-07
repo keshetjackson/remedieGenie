@@ -3,10 +3,10 @@ import Image from "next/image";
 // import botImg from '/bot-img.jpg'
 const userImg = '/user-img.jpg';
 const botImg = '/bot-img.png';
-import { MessageProps,Creator } from "../../interfaces/MessageProps";
+import { MessageProps,Creator } from "../../modules/interfaces/MessageProps";
 
 
- const ChatMessage = ({ content, role }: MessageProps) => {
+ export const ChatMessage = ({ content, role }: MessageProps) => {
     return(
     <>
       {
@@ -27,4 +27,3 @@ import { MessageProps,Creator } from "../../interfaces/MessageProps";
     )
   };
 
-  export default ChatMessage;

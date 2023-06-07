@@ -1,8 +1,8 @@
 
-import { InputProps } from "../../interfaces/InputProps";
+import { InputProps } from "../../modules/interfaces/InputProps";
 import useState  from 'react-usestateref';
 
- const ChatInput = ({ onSend, disabled}: InputProps) => {
+ export const ChatInput = ({ onSend, disabled}: InputProps) => {
     const [input, setInput] = useState('');
   
     const sendInput = () => {
@@ -57,4 +57,3 @@ import useState  from 'react-usestateref';
       );
   };
 
-  export default ChatInput;

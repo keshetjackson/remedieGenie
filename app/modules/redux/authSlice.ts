@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../interfaces/User';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User, userRepository } from '..';
+import { RootState } from '..';
+import { doc } from 'firebase/firestore';
 
 interface AuthState {
   isLoggingIn: boolean;
@@ -14,6 +16,11 @@ const initialState: AuthState = {
   user: null,
   error: null,
 }
+
+export const loginUser = createAsyncThunk('auth/login', async (user: any) => {
+  const userDoc = await userRepository.getUserDoc(user);
+  return userDoc;
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -46,15 +53,23 @@ export const authSlice = createSlice({
        }
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
+      state.isLoggingIn = false;
+      state.isLoggedIn = true;
+      state.user = action.payload;
+      state.error = null;
+    });
+  },
 });
 
 export const { loginRequest, loginSuccess, loginFailure, logout, updateSubscription } = authSlice.actions;
 
-export const selectUserName = ({user} : AuthState) => user?.displayName;
-export const selectUserEmail = ({user} : AuthState) => user?.email;
-export const selectUserDocRef = ({user} : AuthState) => user?.docRef;
-export const selectUserUid = ({user} : AuthState) => user?.uid;
-export const selectSubscription = ({user} : AuthState) => user?.isSubscribed;
+export const selectAuthState = (state: RootState) => state.auth;
+export const selectUserName = (state: RootState) => state.auth.user?.displayName;
+export const selectUserEmail = (state: RootState) => state.auth.user?.email;
+export const selectUserUid = (state: RootState) => state.auth.user?.uid;
+export const selectSubscription = (state: RootState) => state.auth.user?.isSubscribed;
 
 
 export default authSlice.reducer;

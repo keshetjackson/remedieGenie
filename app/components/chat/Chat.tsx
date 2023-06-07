@@ -1,20 +1,11 @@
 "use client"
 import useState  from 'react-usestateref';
-import  ChatInput  from './ChatInput';
-import  ChatMessage  from './ChatMessage';
-import { MessageProps,Creator } from '../../interfaces/MessageProps';
-import { useEffect, useContext } from 'react';
-import { Connect } from 'react-redux';
-import { connect } from 'http2';
-import { useSelector } from 'react-redux';
-
-// const enhance = connect(
-//   ({})
-// )
+import { MessageProps,Creator } from '../../modules/interfaces/MessageProps';
+import { ChatInput,ChatMessage } from './index';
 
 const url = '/api/genie'
 
- const Chat = () => { 
+ export const Chat = () => { 
   const [messages, setMessages, messageRef] = useState<MessageProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [counter, setCounter, counterRef] = useState(0); 
@@ -92,5 +83,4 @@ const url = '/api/genie'
   );
   };
 
-  export default Chat;
 
