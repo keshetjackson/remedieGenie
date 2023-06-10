@@ -1,9 +1,9 @@
 "use client"
 import React from "react";
-import { selectUserUid, store } from "../modules";
+import { selectSubscription, selectUserName, updateSubscription,selectUserUid, store } from "../redux";
 import { updateDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSubscription, selectUserName, updateSubscription, getUserDocRef} from "../modules";
+import { getUserDocRef } from "../firebase";
 
 const Page = async() => {
     const isSubscribed = useSelector(selectSubscription);
@@ -36,11 +36,11 @@ const Page = async() => {
         <>
         {isSubscribed ? 
         <>
-        <button onClick={handleSubscribe}>unsubscribe</button>
+        <button onClick={handleUnSubscribe}>unsubscribe</button>
         </>
         :
         <>
-        <button onClick={handleUnSubscribe}>subscribe</button>
+        <button onClick={handleSubscribe}>subscribe</button>
         </>}
         </>
     )

@@ -1,5 +1,5 @@
 
-import { InputProps } from "../../modules/interfaces/InputProps";
+import { InputProps } from "../../interfaces";
 import useState  from 'react-usestateref';
 
  export const ChatInput = ({ onSend, disabled}: InputProps) => {

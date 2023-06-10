@@ -1,8 +1,9 @@
 "use client"
-import { AppDispatch, auth, loginRequest, loginSuccess } from "..";
+import { AppDispatch, loginRequest, loginSuccess } from ".././redux";
 import {GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { loginUser } from ".."; // Import loginUser thunk
+import { loginUser } from ".././redux"; // Import loginUser thunk
+import { auth } from "./firebaseApp";
 
 const SignInButton = () => {
 

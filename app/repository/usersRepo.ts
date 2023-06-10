@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "..";
-import { User } from "..";
+import { db } from "../firebase";
+import { User } from "../interfaces";
 
 class UserRepository {
   async getUserDoc(user : any): Promise<User> {
@@ -22,7 +22,6 @@ class UserRepository {
       displayName: user.displayName,
       provider: user.providerId,
       uid: user.uid,
-      docRef: userDocRef,
       isSubscribed: false // Default to false if the user document doesn't exist yet
     };
   

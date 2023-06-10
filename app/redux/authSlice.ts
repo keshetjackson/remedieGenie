@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, userRepository } from '..';
-import { RootState } from '..';
+import { User } from '../interfaces';
+import { RootState } from '../redux';
 import { doc } from 'firebase/firestore';
+import { userRepository } from '../repository';
 
 interface AuthState {
   isLoggingIn: boolean;

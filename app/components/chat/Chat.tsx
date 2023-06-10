@@ -1,7 +1,8 @@
 "use client"
 import useState  from 'react-usestateref';
-import { MessageProps,Creator } from '../../modules/interfaces/MessageProps';
-import { ChatInput,ChatMessage } from './index';
+import { MessageProps,Creator } from '../../interfaces';
+import { ChatInput } from './ChatInput';
+import { ChatMessage } from './ChatMessage';
 
 const url = '/api/genie'
 
@@ -70,7 +71,7 @@ const url = '/api/genie'
   return (
     <main className="relative max-w-2xl mx-auto">
       <div className='sticky top-0 w-fll pt-10 px-4'>
-      <ChatInput onSend={(input) => callApi(input)} disabled={loading}/>
+      <ChatInput onSend={(input: string) => callApi(input)} disabled={loading}/>
       </div>
       
       <div className='mt-10 px-4'>

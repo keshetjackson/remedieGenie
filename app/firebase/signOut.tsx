@@ -1,9 +1,9 @@
 "use client"
 import { useDispatch } from "react-redux";
-import { logout } from "..";
+import { logout } from "../redux";
 import { signOut } from "firebase/auth";
-import { auth  } from "..";
-import { store } from "..";
+import { auth  } from "./index";
+import { store } from ".././redux";
 
 
 

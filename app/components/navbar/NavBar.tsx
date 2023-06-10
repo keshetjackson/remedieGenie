@@ -1,9 +1,8 @@
 "use client"
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { RootState, store } from '@/app/modules/redux/store';
-import { SignOutButton } from '@/app/modules/firebase/signOut';
-import SignInButton from '@/app/modules/firebase/SignInButton';
+import { RootState, store } from '../../redux';
+import { SignOutButton,SignInButton } from '../../firebase';
 
 export const Navbar = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);

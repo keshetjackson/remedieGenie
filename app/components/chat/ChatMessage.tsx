@@ -3,7 +3,7 @@ import Image from "next/image";
 // import botImg from '/bot-img.jpg'
 const userImg = '/user-img.jpg';
 const botImg = '/bot-img.png';
-import { MessageProps,Creator } from "../../modules/interfaces/MessageProps";
+import { MessageProps,Creator } from "../../interfaces";
 
 
  export const ChatMessage = ({ content, role }: MessageProps) => {
