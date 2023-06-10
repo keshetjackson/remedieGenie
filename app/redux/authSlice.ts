@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../interfaces';
 import { RootState } from '../redux';
-import { doc } from 'firebase/firestore';
 import { userRepository } from '../repository';
 
 interface AuthState {
@@ -21,6 +20,13 @@ const initialState: AuthState = {
 export const loginUser = createAsyncThunk('auth/login', async (user: any) => {
   const userDoc = await userRepository.getUserDoc(user);
   return userDoc;
+});
+
+export const updateUser = createAsyncThunk('auth/subscription', async (user: User) => {
+  console.log("in action update" + user);
+  const updatedUser = await userRepository.updateUser(user);
+  console.log("after db" + user);
+  return updatedUser;
 });
 
 export const authSlice = createSlice({
@@ -48,14 +54,18 @@ export const authSlice = createSlice({
       state.user = null;
       state.error = null;
     },
-    updateSubscription: (state, action: PayloadAction<boolean>) => {
-       if(state.user){
-        state.user.isSubscribed = action.payload;
-       }
-    }
+    updateSubscription: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    }    
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
+      state.isLoggingIn = false;
+      state.isLoggedIn = true;
+      state.user = action.payload;
+      state.error = null;
+    }),
+    builder.addCase(updateUser.fulfilled, (state, action: PayloadAction<User>) => {
       state.isLoggingIn = false;
       state.isLoggedIn = true;
       state.user = action.payload;
@@ -66,6 +76,7 @@ export const authSlice = createSlice({
 
 export const { loginRequest, loginSuccess, loginFailure, logout, updateSubscription } = authSlice.actions;
 
+export const selectUser = (state: RootState) => state.auth.user;
 export const selectAuthState = (state: RootState) => state.auth;
 export const selectUserName = (state: RootState) => state.auth.user?.displayName;
 export const selectUserEmail = (state: RootState) => state.auth.user?.email;

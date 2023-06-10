@@ -1,49 +1,37 @@
 "use client"
-import React from "react";
-import { selectSubscription, selectUserName, updateSubscription,selectUserUid, store } from "../redux";
-import { updateDoc } from "firebase/firestore";
+import { selectSubscription, updateSubscription,selectUserUid, AppDispatch } from "../redux";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDocRef } from "../firebase";
+import { handleSubscribe,handleUnSubscribe } from "./logic";
+import { selectUser } from "../redux/authSlice";
 
-const Page = async() => {
-    const isSubscribed = useSelector(selectSubscription);
-    const userUid = useSelector(selectUserUid);
-    const dispatch = useDispatch();
-    const docRef = await getUserDocRef(userUid!)
 
-    const handleSubscribe = async() => {  
-        if (!docRef) {
-          console.log('docRef is undefined');
-          return;
-        }
-      
-        await updateDoc(docRef, {  
-          isSubscribed: true  
-        })  
-        dispatch(updateSubscription(true));  
-      }
-      
+const Page = () => {
+  const isSubscribed = useSelector(selectSubscription);
+  const userUid = useSelector(selectUserUid);
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector(selectUser);
 
-    const handleUnSubscribe = async() => {
-        if(docRef)
-        await updateDoc(docRef, {
-            isSubscribed: false
-        })
-        dispatch(updateSubscription(false));
-    }
+  const clickSubscribe = () => {
+    handleSubscribe(userUid!, dispatch, user!);
+  }
 
-    return (
-        <>
-        {isSubscribed ? 
-        <>
-        <button onClick={handleUnSubscribe}>unsubscribe</button>
-        </>
-        :
-        <>
-        <button onClick={handleSubscribe}>subscribe</button>
-        </>}
-        </>
-    )
-}
+  const clickUnsubscribe = () => {
+    handleUnSubscribe(userUid!, dispatch, user!);
+  }
+
+  return (
+    <>
+      {isSubscribed ? (
+        <button onClick={clickUnsubscribe}>
+          unsubscribe
+        </button>
+      ) : (
+        <button onClick={clickSubscribe}>
+          subscribe
+        </button>
+      )}
+    </>
+  );
+};
 
 export default Page;

@@ -1,4 +1,4 @@
-import { User } from "..";
+import { User } from "./User";
 export interface AuthState {
     isLoggingIn: boolean;
     isLoggedIn: boolean;
