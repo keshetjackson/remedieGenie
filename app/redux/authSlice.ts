@@ -82,6 +82,7 @@ export const selectUserName = (state: RootState) => state.auth.user?.displayName
 export const selectUserEmail = (state: RootState) => state.auth.user?.email;
 export const selectUserUid = (state: RootState) => state.auth.user?.uid;
 export const selectSubscription = (state: RootState) => state.auth.user?.isSubscribed;
+export const selectIsUserLoggedIn = (state: RootState) => state.auth.isLoggedIn;
 
 
 export default authSlice.reducer;
