@@ -8,6 +8,8 @@ import {CSVLoader} from "langchain/document_loaders/fs/csv";
 //open ai llm and other elated modules
 import { OpenAI } from "langchain/llms/openai";
 import {RetrievalQAChain} from "langchain/chains";
+import { ConversationalRetrievalQAChain } from "langchain/chains";
+import {BufferMemory} from 'langchain/memory';
 import {HNSWLib} from "langchain/vectorstores/hnswlib";
 import {OpenAIEmbeddings} from "langchain/embeddings/openai";
 import {RecursiveCharacterTextSplitter} from "langchain/text_splitter";
@@ -19,12 +21,21 @@ import registry from "@dqbd/tiktoken/registry.json" assert { type: "json" };
 import models from "@dqbd/tiktoken/model_to_encoding.json" assert { type: "json" };
 
 //Import dotenv for loading environment variables and fs for file system operations
+import readline from "readline";
 import dotenv from 'dotenv';
 import fs from "fs";
 import path from "path";
 dotenv.config({path: "./.env.local"});
-const apiKey = process.env.OPENAI_API_KEY;
-console.log(apiKey);
+
+//initazllize memory
+const memory = new BufferMemory({
+  memoryKey: "chat_history", 
+  inputKey: "question", // The key for the input to the chain
+  outputKey: "text", // The key for the final conversational output of the chain
+  returnMessages: true, // If the chat model should return the messages
+});
+
+
 
 //Initialize the document loader with supported file formats
 const loader = new DirectoryLoader("./documents", {
@@ -74,6 +85,12 @@ function normalizeDocuments(docs) {
 
 //main function to run the process
 export const run = async (acceptableCost) => {
+  //init readline to able to use input output in the console 
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
 
   //calculate the cost
   console.log("calculatin cost...");
@@ -119,19 +136,34 @@ export const run = async (acceptableCost) => {
       console.log("Vector store created.");
     };
      // 18. Create a retrieval chain using the language model and vector store
-     console.log("Creating retrieval chain...");
-     const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
+     console.log("Creating conversational retrieval chain...");
+     const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), { memory });
+     
+     //modify the way you call to the `chain` and handle the chat history.
+     let chatHistory = "";
      
 
-    // 19. Query the retrieval chain with the specified question
-    console.log("Querying chain...");
-    const res = await chain.call({ query: question });
-    console.log({ res });
+    // loop that lets u chat with the model over the console 
+    const ChatLoop = async () => {
+      rl.question('Question: ', async (input) => {
+        console.log("Querying chain...");
+       
+          const res = await chain.call({ question: input, chat_history: chatHistory });
+          chatHistory += `\n${input}\n${res.text}`;
+          console.log(`Answer: ${res.text}`);
+
+        
+  
+        ChatLoop();  // Calling this function again to ask new question.
+      });
+    };
+
+     ChatLoop();
 
   } else {
 
     // 20. If the cost exceeds the limit, skip the embedding process
-    console.log("The cost of embedding exceeds $1. Skipping embeddings.");
+    console.log(`The cost of embedding exceeds ${acceptableCost}$. Skipping embeddings.`);
   };
 };
   
