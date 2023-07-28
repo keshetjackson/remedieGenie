@@ -20,7 +20,7 @@ const Page = () => {
   }
 
   return (
-    <>
+    <div >
       {isSubscribed ? (
         <button onClick={clickUnsubscribe}>
           unsubscribe
@@ -30,7 +30,7 @@ const Page = () => {
           subscribe
         </button>
       )}
-    </>
+    </div>
   );
 };
 

@@ -95,6 +95,7 @@ export default function NavBar2() {
                   >
                     Log in
                   </Link>
+                  
                 </div>
               </div>
             </div>

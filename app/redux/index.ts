@@ -1,4 +1,4 @@
-export { Providers } from "./provider";
+export { Providers } from "../providers";
 export { store} from "./store";
 export type {RootState, AppDispatch} from "./store";
 export { loginRequest, loginSuccess, loginFailure,
