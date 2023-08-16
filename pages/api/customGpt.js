@@ -83,6 +83,8 @@ function normalizeDocuments(docs) {
   });
 }
 
+export default async function handler(res, req)
+
 //main function to run the process
 export const run = async (acceptableCost) => {
   //init readline to able to use input output in the console 
